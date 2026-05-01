@@ -22,7 +22,7 @@ SCORE = 0
 #score = coins
 
 #background
-background = pygame.image.load("griss.png")
+background = pygame.image.load("Background.png")
 
 #fonts or something idk
 font = pygame.font.SysFont("Verdana", 60)
@@ -58,8 +58,10 @@ class Player(pygame.sprite.Sprite):
  
     def move(self):
         pressed_keys = pygame.key.get_pressed()
-        if pressed_keys[K_UP] or pressed_keys[K_w]:
-            self.rect.move_ip(0, -5)
+        if self.rect.height < SCREEN_HEIGHT:
+            if pressed_keys[K_UP] or pressed_keys[K_w]:
+                self.rect.move_ip(0, -5)
+        if self.rect.height > SCREEN_HEIGHT:
             if pressed_keys[K_DOWN] or pressed_keys[K_s]:
                 self.rect.move_ip(0,5)
         if self.rect.left > 0:
@@ -69,10 +71,12 @@ class Player(pygame.sprite.Sprite):
               if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
                   self.rect.move_ip(5, 0)
 
+milkshakes = ["strawberry", "vanilla", "mixed"]
 class Milkshake(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load("Milkshake.png")
+        self.order = random.choice(milkshakes)
+        self.image = pygame.image.load(f"{self.order}.png")
         self.rect = self.image.get_rect()
     
     def move(self):

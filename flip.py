@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[K_UP] or pressed_keys[K_w]:
             self.rect = (0, 100)
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
-            self.rect = (0, 200)
+            self.rect = (0, 300)
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
             self.rect.move_ip(-5, 0)   
         if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
@@ -95,9 +95,9 @@ while True:
             pygame.quit()
             sys.exit()
      
-    DISPLAYSURF.blit(background, (1000,0))
-    DISPLAYSURF.blit(start, (-200,0))
-    DISPLAYSURF.blit(finish, (3000,0))
+    DISPLAYSURF.blit(background, (500,0))
+    DISPLAYSURF.blit(start, (-150,0))
+    DISPLAYSURF.blit(finish, (1000,0))
     # scores = font_small.render(str(SCORE), True, BLACK)
     # DISPLAYSURF.blit(scores, (10,10))
 

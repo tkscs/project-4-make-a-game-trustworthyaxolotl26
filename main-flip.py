@@ -39,14 +39,21 @@ pygame.display.set_caption("Flip Game")
 
  
 class Enemy(pygame.sprite.Sprite):
-      def __init__(self):
+    def __init__(self):
         super().__init__() 
         self.image = pygame.image.load("wall_cropped.png")
         self.rect = self.image.get_rect()
         self.rect.center=(100,100) 
  
-      def move(self):
+    def move(self):
         self.rect.move_ip(0, 0)
+
+    def set_position(self, x, y):
+        self.rect.update(
+            x,
+            y,
+            self.rect.width,
+            self.rect.height)
  
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -106,11 +113,11 @@ while True:
             pygame.quit()
             sys.exit()
 
-
+    E1.set_position(600, 400)
 
     DISPLAYSURF.blit(background, (400,0))
-    DISPLAYSURF.blit(start, (-150,10))
-    DISPLAYSURF.blit(finish, (1000, -47))
+    DISPLAYSURF.blit(start, (-120,10))
+    DISPLAYSURF.blit(finish, (960, -47))
     # scores = font_small.render(str(SCORE), True, BLACK)
     # DISPLAYSURF.blit(scores, (10,10))
 
@@ -119,7 +126,7 @@ while True:
         DISPLAYSURF.blit(entity.image, (entity.rect))
         entity.move()
 
-    # if P1<1000:
+    # if P1.rect < 1000:
     #     P1.set_position(1000, 1000)
 
     #To be run if collision occurs between Player and Enemy
@@ -136,4 +143,3 @@ while True:
          
     pygame.display.update()
     FramePerSec.tick(FPS)
-

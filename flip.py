@@ -2,10 +2,6 @@ import pygame, sys
 from pygame.locals import *
 import random, time
 
-#########################################
-###TODO PUT IN NEW (CENTERED) SPRITES ###
-#########################################
-
 pygame.init()
  
 FPS = 60
@@ -45,10 +41,9 @@ pygame.display.set_caption("Flip Game")
 class Enemy(pygame.sprite.Sprite):
       def __init__(self):
         super().__init__() 
-        self.image = pygame.image.load("Wall.png")
+        self.image = pygame.image.load("wall_cropped.png")
         self.rect = self.image.get_rect()
         self.rect.center=(100,100) 
-        # self.rect = self.rect.normalize()
  
       def move(self):
         self.rect.move_ip(0, 0)
@@ -58,22 +53,35 @@ class Player(pygame.sprite.Sprite):
         super().__init__() 
         self.image = pygame.image.load("Player.png")
         self.rect = self.image.get_rect()
-        # self.rect = pygame.Rect.normalize()
         self.rect.center = (160, 520)
 
-######################################
-###TODO ERRORs OVER HERE ^^^^ vvvv ###
-######################################
     def move(self):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] or pressed_keys[K_w]:
-            self.rect.move_ip(0, -3)
+            self.rect.update(
+                self.rect.left,
+                150,
+                self.rect.width,
+                self.rect.height
+            )
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
-            self.rect.move_ip(0, 2)
+            self.rect.update(
+                self.rect.left,
+                450,
+                self.rect.width,
+                self.rect.height
+            )
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
             self.rect.move_ip(-5, 0)   
         if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
             self.rect.move_ip(5, 0)
+    def set_position(self, x, y):
+        self.rect.update(
+            x,
+            y,
+            self.rect.width,
+            self.rect.height
+        )
 
 P1 = Player()
 E1 = Enemy()
@@ -102,7 +110,7 @@ while True:
 
     DISPLAYSURF.blit(background, (400,0))
     DISPLAYSURF.blit(start, (-150,10))
-    DISPLAYSURF.blit(finish, (1110, -47))
+    DISPLAYSURF.blit(finish, (1000, -47))
     # scores = font_small.render(str(SCORE), True, BLACK)
     # DISPLAYSURF.blit(scores, (10,10))
 
@@ -111,14 +119,13 @@ while True:
         DISPLAYSURF.blit(entity.image, (entity.rect))
         entity.move()
 
-########################    ##########
-###TODO ERROR OVER HERE ^^^^       ###
-######################################
+    # if P1<1000:
+    #     P1.set_position(1000, 1000)
 
     #To be run if collision occurs between Player and Enemy
     if pygame.sprite.spritecollideany(P1, enemies):
         #   time.sleep(0.5)
-          Player.rect = (100, 100)
+          P1.set_position(300, 300)
            
         #   pygame.display.update()
         #   for entity in all_sprites:

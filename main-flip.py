@@ -73,12 +73,13 @@ class Player(pygame.sprite.Sprite):
                     self.rect.height
                 )
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
-            self.rect.update(
-                self.rect.left,
-                450,
-                self.rect.width,
-                self.rect.height
-            )
+            if self.rect.x > 370: 
+                self.rect.update(
+                    self.rect.left,
+                    450,
+                    self.rect.width,
+                    self.rect.height
+                )
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
             self.rect.move_ip(-5, 0)   
         if pressed_keys[K_RIGHT] or pressed_keys[K_d]:

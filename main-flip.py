@@ -31,7 +31,7 @@ finish = pygame.image.load("end.png")
 #fonts or something idk
 font = pygame.font.SysFont("Verdana", 60)
 font_small = pygame.font.SysFont("Verdana", 20)
-game_over = font.render("Game Over", True, BLACK)
+game_over = font.render("You win!", True, BLACK)
 
 DISPLAYSURF = pygame.display.set_mode((1470,600))
 DISPLAYSURF.fill(NAVY)
@@ -65,12 +65,13 @@ class Player(pygame.sprite.Sprite):
     def move(self):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] or pressed_keys[K_w]:
-            self.rect.update(
-                self.rect.left,
-                150,
-                self.rect.width,
-                self.rect.height
-            )
+            if self.rect.x > 370:
+                self.rect.update(
+                    self.rect.left,
+                    150,
+                    self.rect.width,
+                    self.rect.height
+                )
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
             self.rect.update(
                 self.rect.left,
@@ -103,8 +104,9 @@ all_sprites.add(E1)
 #Adding a new User event 
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
- 
- 
+    
+P1.set_position(100,300)
+
 while True:     
     for event in pygame.event.get():
     #     if event.type == INC_SPEED:
@@ -113,33 +115,31 @@ while True:
             pygame.quit()
             sys.exit()
 
-    E1.set_position(600, 400)
+    E1.set_position(600, 410)
 
-    DISPLAYSURF.blit(background, (400,0))
     DISPLAYSURF.blit(start, (-120,10))
-    DISPLAYSURF.blit(finish, (960, -47))
+    DISPLAYSURF.blit(finish, (960, 0))
+    DISPLAYSURF.blit(background, (420,0))
     # scores = font_small.render(str(SCORE), True, BLACK)
     # DISPLAYSURF.blit(scores, (10,10))
+
+###########OH AND MAYBE THERE IS A WALL THINGY THAT FLIPS BACK ANF FORTHS!! LIKE< IT PILSES AN THE N SWITHCHES@!! KINDA LIKE THW T)ONE STRIPPE LED GSAME THING IN THE ECPLORITORIAM!!!!!!
 
 
     for entity in all_sprites:
         DISPLAYSURF.blit(entity.image, (entity.rect))
         entity.move()
 
-    # if P1.rect < 1000:
-    #     P1.set_position(1000, 1000)
+    # if P1.rect.x > 1000:
+    #     P1.set_position(1111, 300) 
+
+    if P1.rect.x > 1000:
+        P1.set_position(1111, 300) 
 
     #To be run if collision occurs between Player and Enemy
     if pygame.sprite.spritecollideany(P1, enemies):
-        #   time.sleep(0.5)
           P1.set_position(300, 300)
            
-        #   pygame.display.update()
-        #   for entity in all_sprites:
-        #         entity.kill() 
-        #   time.sleep(2)
-        #   pygame.quit()
-        #   sys.exit()  
-         
+
     pygame.display.update()
     FramePerSec.tick(FPS)

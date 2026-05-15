@@ -37,7 +37,8 @@ DISPLAYSURF = pygame.display.set_mode((1470,600))
 DISPLAYSURF.fill(NAVY)
 pygame.display.set_caption("Flip Game")
 
- 
+button = pygame.image.load("button.png")
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
@@ -62,24 +63,27 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (160, 520)
 
+#TODO MAKE THIS WORK!!!! VVVVV
+
+    def start(self):
+        pressed_keys = pygame.key.get_pressed()
+        if self.rect.x < 370:
+            if pressed_keys[K_UP] or pressed_keys[K_w]:
+                self.rect.update(500, 
+                                 150, 
+                                 self.rect.width, 
+                                 self.rect.height)
+
     def move(self):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] or pressed_keys[K_w]:
-            if self.rect.x > 370:
-                self.rect.update(
-                    self.rect.left,
-                    150,
-                    self.rect.width,
-                    self.rect.height
-                )
+            self.rect.update(self.rect.left, 150, self.rect.width, self.rect.height)
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
-            if self.rect.x > 370: 
-                self.rect.update(
-                    self.rect.left,
-                    450,
-                    self.rect.width,
-                    self.rect.height
-                )
+            self.rect.update(
+                self.rect.left,
+                450,
+                self.rect.width,
+                self.rect.height)
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
             self.rect.move_ip(-5, 0)   
         if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
@@ -91,22 +95,36 @@ class Player(pygame.sprite.Sprite):
             self.rect.width,
             self.rect.height
         )
+    
 
 P1 = Player()
 E1 = Enemy()
+E2 = Enemy()
 
 #Creating Sprites Groups
 enemies = pygame.sprite.Group()
-enemies.add(E1)
+enemies.add(E1, E2)
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
-all_sprites.add(E1)
+all_sprites.add(E1, E2)
 
 #Adding a new User event 
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
-    
+
+#TODO MAKE THIS WORK!!!! VVVVV
+
+e1x = random.randint(415, 1000)
+e2x = random.randint(415, 1000)
+def playable():
+    if e1x - e2x <=300:
+        e2x = random.randint(415, 1000)
+        playable()
+    playable()
+
 P1.set_position(100,300)
+E1.set_position(e1x, 420)
+E2.set_position(e2x, 140)
 
 while True:     
     for event in pygame.event.get():
@@ -116,8 +134,6 @@ while True:
             pygame.quit()
             sys.exit()
 
-    E1.set_position(600, 410)
-
     DISPLAYSURF.blit(start, (-120,10))
     DISPLAYSURF.blit(finish, (960, 0))
     DISPLAYSURF.blit(background, (420,0))
@@ -126,6 +142,17 @@ while True:
 
 ###########OH AND MAYBE THERE IS A WALL THINGY THAT FLIPS BACK ANF FORTHS!! LIKE< IT PILSES AN THE N SWITHCHES@!! KINDA LIKE THW T)ONE STRIPPE LED GSAME THING IN THE ECPLORITORIAM!!!!!!
 
+    # e1x = random.randint(415, 1000)
+    # e2x = random.randint(415, 1000)
+    # def playable():
+    #     if e1x - e2x >=200:
+    #         print("n")
+    #         e2x = random.randint(415, 1000)
+    #     playable()
+        
+    # E1.set_position(e1x, 420)
+    # E2.set_position(e2x, 140)
+    # time.sleep(1)
 
     for entity in all_sprites:
         DISPLAYSURF.blit(entity.image, (entity.rect))
@@ -135,7 +162,11 @@ while True:
     #     P1.set_position(1111, 300) 
 
     if P1.rect.x > 1000:
-        P1.set_position(1111, 300) 
+        P1.set_position(1111, 300)
+        #show button 
+        # time.sleep(2)
+        # pygame.quit()
+        # sys.exit() 
 
     #To be run if collision occurs between Player and Enemy
     if pygame.sprite.spritecollideany(P1, enemies):

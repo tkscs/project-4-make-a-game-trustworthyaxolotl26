@@ -28,14 +28,15 @@ start = pygame.image.load("start.png")
 background = pygame.image.load("floor.png")
 finish = pygame.image.load("end.png")
 
-#fonts or something idk
-font = pygame.font.SysFont("Verdana", 60)
-font_small = pygame.font.SysFont("Verdana", 20)
-game_over = font.render("You win!", True, BLACK)
+# #fonts or something idk
+# font = pygame.font.SysFont("Verdana", 60)
+# font_small = pygame.font.SysFont("Verdana", 20)
+# game_over = font.render("You win!", True, BLACK)
 
 DISPLAYSURF = pygame.display.set_mode((1470,600))
 DISPLAYSURF.fill(NAVY)
-pygame.display.set_caption("Flip Game")
+played = 1
+pygame.display.set_caption(f"Flip Game - Level {played}")
 
 button = pygame.image.load("button.png")
 
@@ -55,7 +56,7 @@ class Enemy(pygame.sprite.Sprite):
             y,
             self.rect.width,
             self.rect.height)
- 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__() 
@@ -63,31 +64,28 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = (160, 520)
 
-#TODO MAKE THIS WORK!!!! VVVVV
-
-    def start(self):
-        pressed_keys = pygame.key.get_pressed()
-        if self.rect.x < 370:
-            if pressed_keys[K_UP] or pressed_keys[K_w]:
-                self.rect.update(500, 
-                                 150, 
-                                 self.rect.width, 
-                                 self.rect.height)
-
     def move(self):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] or pressed_keys[K_w]:
-            self.rect.update(self.rect.left, 150, self.rect.width, self.rect.height)
+                if self.rect.y == 300:
+                    self.rect.update(426, 150, 
+                                 self.rect.width, 
+                                 self.rect.height)
+                else:
+                    self.rect.update(self.rect.left, 150, self.rect.width, self.rect.height)
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
-            self.rect.update(
-                self.rect.left,
-                450,
-                self.rect.width,
-                self.rect.height)
+            if self.rect.y == 300:
+                    self.rect.update(426, 150, 
+                                 self.rect.width, 
+                                 self.rect.height)
+            else:
+                self.rect.update(self.rect.left, 450,
+                    self.rect.width,
+                    self.rect.height)
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-            self.rect.move_ip(-5, 0)   
+            self.rect.move_ip(-4, 0)   
         if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-            self.rect.move_ip(5, 0)
+            self.rect.move_ip(4, 0)
     def set_position(self, x, y):
         self.rect.update(
             x,
@@ -95,7 +93,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.width,
             self.rect.height
         )
-    
 
 P1 = Player()
 E1 = Enemy()
@@ -112,19 +109,27 @@ all_sprites.add(E1, E2)
 INC_SPEED = pygame.USEREVENT + 1
 pygame.time.set_timer(INC_SPEED, 1000)
 
-#TODO MAKE THIS WORK!!!! VVVVV
+e1x = 1
+e2x = 1
 
-e1x = random.randint(415, 1000)
-e2x = random.randint(415, 1000)
 def playable():
-    if e1x - e2x <=300:
+    global e1x
+    global e2x
+    if abs(e1x - e2x) <=126:
         e2x = random.randint(415, 1000)
         playable()
-    playable()
 
+def level():
+    global e1x
+    global e2x
+    e1x = random.randint(415, 1000)
+    e2x = random.randint(415, 1000)
+    playable()
+    E1.set_position(e1x, 420)
+    E2.set_position(e2x, 140)
+
+level()
 P1.set_position(100,300)
-E1.set_position(e1x, 420)
-E2.set_position(e2x, 140)
 
 while True:     
     for event in pygame.event.get():
@@ -142,29 +147,25 @@ while True:
 
 ###########OH AND MAYBE THERE IS A WALL THINGY THAT FLIPS BACK ANF FORTHS!! LIKE< IT PILSES AN THE N SWITHCHES@!! KINDA LIKE THW T)ONE STRIPPE LED GSAME THING IN THE ECPLORITORIAM!!!!!!
 
-    # e1x = random.randint(415, 1000)
-    # e2x = random.randint(415, 1000)
-    # def playable():
-    #     if e1x - e2x >=200:
-    #         print("n")
-    #         e2x = random.randint(415, 1000)
-    #     playable()
-        
-    # E1.set_position(e1x, 420)
-    # E2.set_position(e2x, 140)
-    # time.sleep(1)
-
     for entity in all_sprites:
         DISPLAYSURF.blit(entity.image, (entity.rect))
         entity.move()
 
-    # if P1.rect.x > 1000:
-    #     P1.set_position(1111, 300) 
+    if P1.rect.x > 330 and P1.rect.y == 300:
+        P1.set_position(330, 300) 
+    if P1.rect.x < 26 and P1.rect.y == 300:
+        P1.set_position(26, 300) 
 
     if P1.rect.x > 1000:
         P1.set_position(1111, 300)
+        # P1.set_position(1121, 300)
+        # time.sleep(0.5)
+        # P1.set_position(1131, 300)
+        # P1.set_position(1141, 300)
+        level()
+        played += 1
+        pygame.display.set_caption(f"Flip Game - Level {played}")
         #show button 
-        # time.sleep(2)
         # pygame.quit()
         # sys.exit() 
 
@@ -172,6 +173,5 @@ while True:
     if pygame.sprite.spritecollideany(P1, enemies):
           P1.set_position(300, 300)
            
-
     pygame.display.update()
     FramePerSec.tick(FPS)

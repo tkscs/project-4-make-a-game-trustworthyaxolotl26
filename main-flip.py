@@ -56,6 +56,12 @@ class Enemy(pygame.sprite.Sprite):
             y,
             self.rect.width,
             self.rect.height)
+    
+    def switch(self):
+        while True:
+            self.set_position(300, 420)
+            time.sleep(0.1)
+            self.set_position(300, 140)
 
 class Player(pygame.sprite.Sprite):
     def __init__(self):
@@ -67,25 +73,28 @@ class Player(pygame.sprite.Sprite):
     def move(self):
         pressed_keys = pygame.key.get_pressed()
         if pressed_keys[K_UP] or pressed_keys[K_w]:
-                if self.rect.y == 300:
+                if self.rect.x <= 400:
                     self.rect.update(426, 150, 
                                  self.rect.width, 
                                  self.rect.height)
                 else:
-                    self.rect.update(self.rect.left, 150, self.rect.width, self.rect.height)
+                    self.rect.update(self.rect.left, 150, 
+                                     self.rect.width, self.rect.height)
         if pressed_keys[K_DOWN] or pressed_keys[K_s]:
-            if self.rect.y == 300:
-                    self.rect.update(426, 150, 
+            if self.rect.x <= 400:
+                    self.rect.update(426, 450, 
                                  self.rect.width, 
                                  self.rect.height)
             else:
                 self.rect.update(self.rect.left, 450,
-                    self.rect.width,
-                    self.rect.height)
+                                self.rect.width, self.rect.height)
         if pressed_keys[K_LEFT] or pressed_keys[K_a]:
-            self.rect.move_ip(-4, 0)   
+            if self.rect.x >=426 and self.rect.y != 300:
+                self.rect.move_ip(-4, 0)   
         if pressed_keys[K_RIGHT] or pressed_keys[K_d]:
-            self.rect.move_ip(4, 0)
+            if self.rect.x >=426 and self.rect.y != 300:
+                self.rect.move_ip(4, 0)
+
     def set_position(self, x, y):
         self.rect.update(
             x,
@@ -97,6 +106,7 @@ class Player(pygame.sprite.Sprite):
 P1 = Player()
 E1 = Enemy()
 E2 = Enemy()
+E3 = Enemy()
 
 #Creating Sprites Groups
 enemies = pygame.sprite.Group()

@@ -110,16 +110,16 @@ class Player(pygame.sprite.Sprite):
 P1 = Player()
 E1 = Enemy()
 E2 = Enemy()
-E3 = Enemy()
+# E3 = Enemy()
 
 #Creating Sprites Groups
 enemies = pygame.sprite.Group()
 enemies.add(E1, E2)
-enemies.add(E3)
+# enemies.add(E3)
 all_sprites = pygame.sprite.Group()
 all_sprites.add(P1)
 all_sprites.add(E1, E2)
-all_sprites.add(E3)
+# all_sprites.add(E3)
 
 #Adding a new User event 
 INC_SPEED = pygame.USEREVENT + 1
@@ -145,7 +145,7 @@ def level():
     E2.set_position(e2x, 140)
 
 level()
-E3.set_position(500, 140)
+# E3.set_position(500, 140)
 P1.set_position(100,300)
 
 while True:     
@@ -168,7 +168,7 @@ while True:
         DISPLAYSURF.blit(entity.image, (entity.rect))
         entity.move()
 
-    E3.switch()
+    # E3.switch()
 
     if P1.rect.x > 330 and P1.rect.y == 300:
         P1.set_position(330, 300) 
